@@ -24,4 +24,16 @@ also env name is penv so added and changed it in .gitignore file also
 also in setting.py of ekart_project
         added AUTH_USER_MODEL = 'accounts.Accounts'
         added AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
-        It takes privilege of accounts.Accounts otehrwise user goes into other app or random.
+      #  It takes privilege of accounts.Accounts otehrwise user goes into other app or random.
+Regsitered in admin.py of ekart_project
+                admin.site.register(Account)
+                admin.site.register(UserProfile)
+Installed   pillow for image processing  through
+                        pip install pillow
+Applied migration and migrate through 
+                python manage.py makemigrations
+                python manage.py migrate 
+Create superuser through python manage.py createsuperuser
+        email-pankajmendla@gmail.com
+        username-iampm07
+        pswrd-Pankaj123
