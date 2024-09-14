@@ -1,8 +1,9 @@
 from django.db import models
 
+
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
 # create model here
-class AccountsManager(BaseUserManager):
+class MyAccountsManager(BaseUserManager):
 
     def create_user(self,first_name,last_name,username,email,password=None):
         if not email:
@@ -36,7 +37,7 @@ class AccountsManager(BaseUserManager):
         return user
 
 
-class Accounts(AbstractBaseUser):
+class Account(AbstractBaseUser):
     first_name=models.CharField(max_length=50)
     last_name=models.CharField(max_length=50)
     username=models.CharField(max_length=80,unique=True)    
@@ -58,24 +59,24 @@ class Accounts(AbstractBaseUser):
 
 
 
-    objects=AccountsManager()
+    objects=MyAccountsManager()
 
     def full_name(self):
-        return f"{self.first_name}{self.last_name}"
+        return f'{self.first_name}{self.last_name}'
     
     def __str__(self):
         return self.email
     
-    def has_perm(self,perm,obj=None):
+    def has_perm(self, perm, obj=None):
         return self.is_admin
     
-    def has_module_perms(self,add_label):
+    def has_module_perms(self, add_label):
         return True
     
 
 
 class UserProfile(models.Model):
-    user=models.OneToOneField(Accounts,on_delete=models.CASCADE)
+    user=models.OneToOneField(Account,on_delete=models.CASCADE)
     address_line_1=models.CharField(blank=True,max_length=100)
     address_line_2=models.CharField(blank=True,max_length=100)
     profile_picture=models.ImageField(blank=True,upload_to='userprofile')
