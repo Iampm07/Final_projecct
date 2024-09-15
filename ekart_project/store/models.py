@@ -23,3 +23,17 @@ class Product(models.Model):
        auto_now updates the field value every time the instance is saved,
       while auto_now_add sets the field value only when instance is created.
     '''
+variation_category_choice=(
+    ('color','color'),
+    ('size','size')
+)
+
+class Variation(models.Model):
+    product=models.ForeignKey(Product,on_delete=models.CASCADE)
+    variation_category=models.CharField(max_length=100,choices=variation_category_choice)
+    variation_value=models.CharField(max_length=100)
+    is_active=models.BooleanField(default=True)
+    created_date=models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return self.product
