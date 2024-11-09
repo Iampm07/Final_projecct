@@ -1,8 +1,5 @@
 from django.shortcuts import render,redirect
 
-from .models import Account
-from django.contrib import messages,auth
-from django.contrib.auth.decorators import login_required
 
 
 def register(request):
