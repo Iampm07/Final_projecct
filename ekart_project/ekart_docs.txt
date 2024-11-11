@@ -103,37 +103,96 @@ Created Payment and order model in orders>model.py
 
 
 
+Structure completed insde work started from here.........//////////////////////////////////
 
 
-In Accounts folder ,create anew file forms.py
+1)      In Accounts folder ,create anew file forms.py
         from django import forms
-from .models import Account
-class RegistrationForm(forms.ModelForm):
-    class Meta:
-        #(to link  model to form)
-        model = Account
-        fields =['first_name','last_name','phone_number','email','password']
+        from .models import Account
+        class RegistrationForm(forms.ModelForm):
+        class Meta:
+                #(to link  model to form)
+                model = Account
+                fields =['first_name','last_name','phone_number','email','password']
          
-imside accounts/views.py  following changes:
+2)inside accounts/views.py  following changes:
 
-        from django.shortcuts import render,redirect
+3)Now we have this form variable available in register.html 
+4)And changes inside register.html(gathering  all first last name from form variable)
+
+5)      add this to accounts/forms.py
+                password = forms.CharField(widget=forms.PasswordInput(attrs={
+                        'placeholder':'Enter password'
+                        }))
+
+                confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
+                        'placeholder':'Confirm password'
+                        }))
+                def __init__(self, *args, **kwargs):
+        super(RegistrationForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].widget_attrs['placeholder']="Enter first name"
+        self.fields['last_name'].widget_attrs['placeholder']="Enter last name"
+        for field in self.fields:
+            self.fields[field].widget.attrs['class']='form-control'
+        the above init method is to give all the fields bootstrap 'form-control class
+        and you also give placeholder to all the specific fields.
+6)  The again make changes inside register.html to handle post data request:
+                from django.shortcuts import render
+                from .forms import RegistrationForm
+                from .models import Account
 
 
 
-def register(request):
-    if request.methpd=="POST":
-        form=RegistrationForm(request.POST)
-        if form.is_valid():
-            first_name=form.cleaned_data['first_name']
-            last_name=form.cleaned_data['last_name']
-            phone_number=form.cleaned_data['phone_number']
-            email=form.cleaned_data['email']
-            password=form.cleaned_data['password']
-            username=email.split('@')[0]
-            user=Account.objects.create_user(first_name=first_name,last_name=last_name,email=email,username=username)
-            user.phone_number=phone_number
-            user.save()
-            messages.success(request,'Registrartion Successful')
-            return redirect('register')
- now we have this form variable available in register.html
- changes inside register.html
+                def register(request):
+                if request.methpd=="POST":
+                        form=RegistrationForm(request.POST)
+                        if form.is_valid():
+                        first_name=form.cleaned_data['first_name']
+                        last_name=form.cleaned_data['last_name']
+                        phone_number=form.cleaned_data['phone_number']
+                        email=form.cleaned_data['email']
+                        password=form.cleaned_data['password']
+                        username=email.split('@')[0]
+                        user=Account.objects.create_user(first_name=first_name,last_name=last_name,email=email,username=username)
+                        user.phone_number=phone_number
+                        user.save()
+                        return redirect('register')
+                        else:
+                        form= RegistrationForm()
+                        context= {
+                        'form':form,
+                        }
+                        return render(request,'accounts/register.html',context)
+ 7)    Create  a function inside accounts /forms.py  to check  password and confirm password are same:
+
+                def clean(self):
+                        cleaned_data=super(RegistrationForm, self).clean()
+                        password = cleaned_data.get('password')
+                        confirm_password=cleaned_data.get('confirm password')
+
+                        if password != confirm_password:
+                        raise forms.ValidationError(
+                                "Password  does not match !"
+                        )
+        -and also put {{form.email.error}} and {{form.non_field_error}}below the submit button inside the register.html
+
+8) Now use django message inside settings.py
+        from django.contrib.messages import constants as messages
+        MESSAGE_TAGS={
+                messages.ERROR:'danger'
+        }
+9) Create alerts.html inside includes folder:
+        {% if messages %}
+
+        {% for message in messages %}
+
+        <div id="message" class="container">
+        <div{%if message.tags %} class="alert alert-{{message.tags}}" {% endif %} role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error:{% endif %}
+        {{ message }}
+        </div>
+
+        </div>
+        {% endfor %}
+        {% endif %}
