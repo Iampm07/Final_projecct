@@ -1,11 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .forms import RegistrationForm
 from .models import Account
+from django.contrib import messages,auth
 
 
 
 def register(request):
-    if request.methpd=="POST":
+    if request.method=="POST":
+        print("request.POST"=="POST")
         form=RegistrationForm(request.POST)
         if form.is_valid():
             first_name=form.cleaned_data['first_name']
@@ -17,28 +19,32 @@ def register(request):
             user=Account.objects.create_user(first_name=first_name,last_name=last_name,email=email,username=username)
             user.phone_number=phone_number
             user.save()
-            return redirect('register')
+            return redirect('login')
         else:
             form= RegistrationForm()
         context= {
             'form':form,
         }
-        return render(request,'accounts/register.html',context)
+        return render(request,'accounts/register.html', context)
+    
+
 def login(request):
     if request.method =="POST":
         email = request.POST['email']
         password = request.POST['password']
 
         user = auth.authenticate(email=email,password=password)
+        print("user",user)
 
         if user is not None:
-            auth.login(request=user)
+            auth.login(request,user)
+            return redirect('register')
 
         else:
             messages.error(request,'invalid login credentials')
-            return redirect,'accounts/login.html'
-    return render(request,'Your are Logged out.')
+            return redirect,'login'
+    return render(request,'accounts/login.html')
 def logout(request):
     auth.logout(request)
-    messages.success(request,'Your are Logged out.')
+    messages.success(request,'Your have been Logged out.')
     return redirect('login')

@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'cart',
     'orders',
     'store',
     'category',
@@ -73,9 +74,6 @@ TEMPLATES = [
     },
 ]
 
-MESSAGE_TAGS={
-                messages.ERROR:'danger'
-}
 WSGI_APPLICATION = 'ekart_project.wsgi.application'
 
 AUTH_USER_MODEL = 'accounts.Account'
@@ -108,6 +106,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+MESSAGE_TAGS={
+                messages.ERROR:'danger'
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -125,6 +126,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+
+STATIC_ROOT = BASE_DIR/'static'
+STATICFILES_DIRS = [
+    'ekart_project/static'
+]
+
+# media-files configuration
+MEDIA_URL='/media/'
+MEDIA_ROOT= BASE_DIR /'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

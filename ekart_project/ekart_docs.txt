@@ -196,3 +196,63 @@ Structure completed insde work started from here.........///////////////////////
         </div>
         {% endfor %}
         {% endif %}
+10) Include alerts.html inside register.html
+11) you can put the below code inside ekart_project/static/js/script.js
+                setTimeout(function(){
+                        $('#message').fadeout('slow')
+                },4000)
+
+12) User Login Functionality:
+        -copy the template lie we did in sign up form
+                do this in login.html: 
+            <form action="{%url 'login %}" method="POST">
+                {% csrf_token %}
+                  <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Enter your email address" name="EMAIL">
+                  </div> <!--  from-group//-->
+                 <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Enter your password" name="password">
+                 </div> <!--   from-group////-->
+
+        --Now in -accounts/views.py
+                def login(request):
+                        if request.method =="POST":
+                                email = request.POST['email']
+                                password = request.POST['password']
+
+                                user = auth.authenticate(email=email,password=password)
+
+                                if user is not None:
+                                auth.login(request=user)
+
+                                else:
+                                messages.error(request,'invalid login credentials')
+                                return redirect,'accounts/login.html'
+                        return render(request,'Your are Logged out.')
+        Also put this in {%include 'includes/alerts.html %}in login.html to see the alert messages.
+        and also  make sure when you are logged in you should only see logout in header
+        so do these steps in navbar.html
+                        <div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
+                                <div class="d-flex justify-content-end mb-3 mb-lg-0">
+                                        {% if user.id is None %}
+                                       <div class="widget-header">
+                                           <small class="title text-muted">Welcome Guest</small>
+                                       <div>
+                                         <a href="{%url 'login'%}">Sign In</a><span class="dark-transp"></span>
+                                         <a href="{url 'register'}">Register</a>
+                                </div>
+                        </div>
+                                       {% else %}
+                                <div class="widget-header">
+                                        <small class="title text-muted">{{user.first_name}}</small>
+                                <div>
+                                        <a href="#">Dashboard</a><span class="dark-transp">| </span>
+                                        <a href="{% url 'logout'%}">Logout</a>
+                                </div>
+13) Add logout Functionality also,we can do it  as following:
+        accounts/views.py
+        @login_required(login_url='login')
+        def logout(request):
+        auth.logout(request)
+        messages.success(request,'you have been logged out')                         (@- means its a decorator)        
+        return redirect('login')
