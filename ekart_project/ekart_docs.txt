@@ -103,7 +103,7 @@ Created Payment and order model in orders>model.py
 
 
 
-Structure completed insde work started from here.........//////////////////////////////////
+Structure completed inside work started from here.........//////////////////////////////////
 
 
 1)      In Accounts folder ,create anew file forms.py

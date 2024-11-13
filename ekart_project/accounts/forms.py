@@ -3,9 +3,10 @@ from .models import Account
 
 
 class RegistrationForm(forms.ModelForm):
-    password=forms.CharField(widget=forms.PasswordInput(attrs={
-        'placeholder':'Enter Password'
+    password= forms.CharField(widget=forms.PasswordInput(attrs={
+          'placeholder':'Enter Password'
         }))
+    
     confirm_password=forms.CharField(widget=forms.PasswordInput(attrs={
         'placeholder':'Confirm password'
         }))
@@ -16,8 +17,10 @@ class RegistrationForm(forms.ModelForm):
          
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
-        self.fields['first_name'].widget_attrs['placeholder']="Enter first name"
-        self.fields['last_name'].widget_attrs['placeholder']="Enter last name"
+        
+        self.fields['first_name'].widget.attrs['placeholder'] = 'Enter first name'
+
+        self.fields['last_name'].widget.attrs['placeholder'] = 'Enter last name'
         for field in self.fields:
             self.fields[field].widget.attrs['class']='form-control'
 
