@@ -10,7 +10,7 @@
         <article class ="card-body">
             {% include 'includes/alerts.html'%}
             <header class="mb-4"><h4 class="card-title">Sign UP</h4></header>
-            <form action ="{% url 'register' % }" method="POST">
+            <form action ="{% url 'register' %}" method="POST">
                 {% csrf_token%}
                 <div class="form-row">
                     <div class="col form-group">
@@ -47,14 +47,14 @@
                 </div> 
                 <div class="form-group">
                     <input type="submit" class="btn btn-primary btn-block" value="Register">
-                    <!--<button type="Submit" class="btn btn-primary btn-block">REGISTER</button>-->
+                        <button type="submit" class="btn btn-primary btn-block"> Register  </button>
                 </div> 
                 {{form.email.errors}}
                 {{form.non_field_errors}}  
             </form>
         </article><!--card body  -->
     </div> <!--card //////-->
-    <p class="text-center mt-4">Have an account??<a href="{%url 'login'%}">LOG IN</a></p>
+    <p class="text-center mt-4">Have an account??<a href="{% url 'login'%}">LOG IN</a></p>
     <br><br>
     <!--    ============COMPONENT REGISTER END================-->
 
